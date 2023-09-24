@@ -11,13 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.db = void 0;
 const sequelize_1 = require("sequelize");
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const User_1 = __importDefault(require("../models/User"));
 const pg_1 = __importDefault(require("pg"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const password = process.env.DB_PASSWORD || '';
 const username = process.env.DB_USER || '';
 const db = {};
+exports.db = db;
 const sequelize = new sequelize_1.Sequelize('testDb', username, password, {
     host: 'localhost',
     dialect: 'postgres',
@@ -52,13 +57,21 @@ db.connect = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
 });
 db.createTable = () => __awaiter(void 0, void 0, void 0, function* () {
-    // const vpnName = require('../models/vpnName');
-    // const vpnIp = require('../models/vpnIp');
-    // const user = require('../models/user');
-    //
-    // await vpnName.sync({ force: true });
-    // await vpnIp.sync({ force: true });
-    // await user.sync({ force: true });
+    yield User_1.default.sync({ force: true });
+    const adminPassword = process.env.ADMIN_PASSWORD || '';
+    const adminUsername = process.env.ADMIN_PASSWORD || '';
+    let password = yield adminPassword;
+    let salt = yield bcryptjs_1.default.genSaltSync(10);
+    let hashPassword = yield bcryptjs_1.default.hashSync(password, salt);
+    yield User_1.default.create({
+        username: adminUsername,
+        password: hashPassword,
+        role: 'admin'
+    }).then((user) => {
+        console.log('Admin kullanıcı oluşturuldu');
+    }).catch((error) => {
+        console.error('Admin kullanıcı oluşturulamadı', error);
+    });
 });
 db.dbQueryAndCreate = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -79,4 +92,3 @@ db.dbQueryAndCreate = () => __awaiter(void 0, void 0, void 0, function* () {
         console.error('Veritabanı oluşturma hatası:', error);
     }
 });
-module.exports = db;

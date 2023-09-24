@@ -1,8 +1,8 @@
 import {QueryTypes, Sequelize} from 'sequelize';
-
+import bcrypt from 'bcryptjs'
+import User from '../models/User'
 import pg from 'pg';
 import dotenv from 'dotenv';
-
 dotenv.config();
 const password:string = process.env.DB_PASSWORD || '';
 const username:string = process.env.DB_USER || '';
@@ -17,7 +17,7 @@ const sequelize = new Sequelize('testDb', username, password, {
         max: 3,
     },
 });
-const sequelizetest = new Sequelize('postgres', username, password, {
+const sequelizetest = new Sequelize('postgres', username, password,  {
     host: 'localhost',
     dialect: 'postgres',
     port: 5432,
@@ -44,13 +44,22 @@ db.connect = async () => {
 };
 
 db.createTable = async () => {
-    // const vpnName = require('../models/vpnName');
-    // const vpnIp = require('../models/vpnIp');
-    // const user = require('../models/user');
-    //
-    // await vpnName.sync({ force: true });
-    // await vpnIp.sync({ force: true });
-    // await user.sync({ force: true });
+    await User.sync({ force: true });
+
+    const adminPassword:string=process.env.ADMIN_PASSWORD||''
+    const adminUsername:string=process.env.ADMIN_PASSWORD||''
+    let password:string= await adminPassword
+    let salt:string =await bcrypt.genSaltSync(10)
+    let hashPassword:string=await bcrypt.hashSync(password,salt)
+    await User.create({
+        username: adminUsername,
+        password:hashPassword,
+        role: 'admin'
+    }).then((user: any) => { // user türünü açıkça belirtin
+        console.log('Admin kullanıcı oluşturuldu');
+    }).catch((error: any) => { // error türünü açıkça belirtin
+        console.error('Admin kullanıcı oluşturulamadı', error);
+    });
 
 
 
@@ -74,4 +83,4 @@ db.dbQueryAndCreate = async () => {
     }
 };
 
-export = db;
+export {db}

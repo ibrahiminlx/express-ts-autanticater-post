@@ -8,18 +8,65 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const userServices = require('../services/userServices');
-let userGet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.editPasswordController = exports.deleteUserController = exports.editRoleController = exports.createUserController = exports.userGetNameController = void 0;
+const userServices_1 = require("../services/userServices");
+const baseResponse_1 = __importDefault(require("../dto/baseResponse"));
+let userGetNameController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const json = yield userServices.userGet(req, res);
-        res.status(200).json(json);
+        const json = yield (0, userServices_1.userGetNameServices)(req, res);
+        res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
     }
     catch (e) {
         console.log('e', e);
         res.status(500).json({ Error: 'Bir hata olustu' });
     }
 });
-module.exports = {
-    userGet
-};
+exports.userGetNameController = userGetNameController;
+let createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const json = yield (0, userServices_1.createUserServices)(req, res);
+        res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
+    }
+    catch (e) {
+        console.log('e', e);
+        res.status(500).json({ Error: 'Bir hata olustu' });
+    }
+});
+exports.createUserController = createUserController;
+let editRoleController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const json = yield (0, userServices_1.editRoleServices)(req, res);
+        res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
+    }
+    catch (e) {
+        console.log('e', e);
+        res.status(500).json({ Error: 'Bir hata olustu' });
+    }
+});
+exports.editRoleController = editRoleController;
+let editPasswordController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const json = yield (0, userServices_1.editPasswordServices)(req, res);
+        res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
+    }
+    catch (e) {
+        console.log('e', e);
+        res.status(500).json({ Error: 'Bir hata olustu' });
+    }
+});
+exports.editPasswordController = editPasswordController;
+let deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const json = yield (0, userServices_1.deleteUserServices)(req, res);
+        res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
+    }
+    catch (e) {
+        console.log('e', e);
+        res.status(500).json({ Error: 'Bir hata olustu' });
+    }
+});
+exports.deleteUserController = deleteUserController;

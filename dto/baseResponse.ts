@@ -8,7 +8,7 @@ interface Data {
 
 const baseResponseFunctionError = (data: Partial<Data>) => {
     const obj = {
-        code: 400,
+        code: 500,
         error: true,
         success: false,
         data: {},

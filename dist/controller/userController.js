@@ -15,25 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.editPasswordController = exports.deleteUserController = exports.editRoleController = exports.createUserController = exports.userGetNameController = void 0;
 const userServices_1 = require("../services/userServices");
 const baseResponse_1 = __importDefault(require("../dto/baseResponse"));
+const userValidations_1 = require("./validations/userValidations");
 let userGetNameController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { username } = req.body;
+        (0, userValidations_1.userValidations)({ username });
+        const data = yield (0, userServices_1.usernameControlServices)(username);
+        if ((data === null || data === void 0 ? void 0 : data.dataValues) === undefined) {
+            throw new Error('Bu kullanici sistemde bulunamadi.');
+        }
         const json = yield (0, userServices_1.userGetNameServices)(req, res);
         res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
     }
     catch (e) {
         console.log('e', e);
-        res.status(500).json({ Error: 'Bir hata olustu' });
+        res.status(500).json(baseResponse_1.default.baseResponseFunctionError({ message: e.message }));
     }
 });
 exports.userGetNameController = userGetNameController;
 let createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { username, password, role } = req.body;
+        (0, userValidations_1.userValidations)({ username, password, role });
         const json = yield (0, userServices_1.createUserServices)(req, res);
         res.json(baseResponse_1.default.baseResponseFunctionSuccess({ data: json }));
     }
     catch (e) {
         console.log('e', e);
-        res.status(500).json({ Error: 'Bir hata olustu' });
+        res.status(500).json(baseResponse_1.default.baseResponseFunctionError({ message: e.message }));
     }
 });
 exports.createUserController = createUserController;
@@ -44,7 +53,7 @@ let editRoleController = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (e) {
         console.log('e', e);
-        res.status(500).json({ Error: 'Bir hata olustu' });
+        res.status(500).json(baseResponse_1.default.baseResponseFunctionError({ message: e.message }));
     }
 });
 exports.editRoleController = editRoleController;
@@ -55,7 +64,7 @@ let editPasswordController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (e) {
         console.log('e', e);
-        res.status(500).json({ Error: 'Bir hata olustu' });
+        res.status(500).json(baseResponse_1.default.baseResponseFunctionError({ message: e.message }));
     }
 });
 exports.editPasswordController = editPasswordController;
@@ -66,7 +75,7 @@ let deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (e) {
         console.log('e', e);
-        res.status(500).json({ Error: 'Bir hata olustu' });
+        res.status(500).json(baseResponse_1.default.baseResponseFunctionError({ message: e.message }));
     }
 });
 exports.deleteUserController = deleteUserController;

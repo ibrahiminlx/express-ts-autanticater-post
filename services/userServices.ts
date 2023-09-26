@@ -10,6 +10,8 @@ let userGetNameServices=async (req:Request,res:Response)=>{
 
     }catch (e) {
         console.log('e',e)
+        throw e
+
     }
 }
 let createUserServices=async (req:Request,res:Response)=>{
@@ -26,6 +28,8 @@ let createUserServices=async (req:Request,res:Response)=>{
 
     }catch (e) {
         console.log('e',e)
+        throw e
+
     }
 }
 let editRoleServices=async (req:Request,res:Response)=>{
@@ -38,6 +42,8 @@ let editRoleServices=async (req:Request,res:Response)=>{
 
     }catch (e) {
         console.log('e',e)
+        throw e
+
     }
 }
 let editPasswordServices=async (req:Request,res:Response)=>{
@@ -49,6 +55,8 @@ let editPasswordServices=async (req:Request,res:Response)=>{
 
     }catch (e) {
         console.log('e',e)
+        throw e
+
     }
 }
 let deleteUserServices=async (req:Request,res:Response)=>{
@@ -59,11 +67,22 @@ let deleteUserServices=async (req:Request,res:Response)=>{
 
     }catch (e) {
         console.log('e',e)
+        throw e
+
+    }
+}
+let usernameControlServices=async (username:string)=>{
+    try {
+        const user= await User.findOne({where:{username}})
+        return user
+
+    }catch (e) {
+        throw e
     }
 }
 
 
 export {
-    userGetNameServices,createUserServices,editRoleServices,deleteUserServices,editPasswordServices
+    userGetNameServices,createUserServices,editRoleServices,deleteUserServices,editPasswordServices,usernameControlServices
 }
 

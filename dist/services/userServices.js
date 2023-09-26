@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.editPasswordServices = exports.deleteUserServices = exports.editRoleServices = exports.createUserServices = exports.userGetNameServices = void 0;
+exports.usernameControlServices = exports.editPasswordServices = exports.deleteUserServices = exports.editRoleServices = exports.createUserServices = exports.userGetNameServices = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = __importDefault(require("../models/User"));
 let userGetNameServices = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,6 +23,7 @@ let userGetNameServices = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (e) {
         console.log('e', e);
+        throw e;
     }
 });
 exports.userGetNameServices = userGetNameServices;
@@ -40,6 +41,7 @@ let createUserServices = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (e) {
         console.log('e', e);
+        throw e;
     }
 });
 exports.createUserServices = createUserServices;
@@ -53,6 +55,7 @@ let editRoleServices = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (e) {
         console.log('e', e);
+        throw e;
     }
 });
 exports.editRoleServices = editRoleServices;
@@ -64,6 +67,7 @@ let editPasswordServices = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (e) {
         console.log('e', e);
+        throw e;
     }
 });
 exports.editPasswordServices = editPasswordServices;
@@ -75,6 +79,17 @@ let deleteUserServices = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
     catch (e) {
         console.log('e', e);
+        throw e;
     }
 });
 exports.deleteUserServices = deleteUserServices;
+let usernameControlServices = (username) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield User_1.default.findOne({ where: { username } });
+        return user;
+    }
+    catch (e) {
+        throw e;
+    }
+});
+exports.usernameControlServices = usernameControlServices;

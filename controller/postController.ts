@@ -2,13 +2,14 @@ import {Request, Response} from "express";
 import {
     postIdControlServices,
     postGetIdServices,
-    createPostServices,
     editPostSevices,
     deletePostServices,
-    postGetDeletedServices, postIdDeletedControlServices
+    postGetDeletedServices, postIdDeletedControlServices, createPostServices, postnameControlServices
 } from "../services/postServices";
 import baseResponse from '../dto/baseResponse'
 import {postValidations} from "./validations/postValidations";
+import jwt from "jsonwebtoken";
+import {usernameControlServices} from "../services/userServices";
 
 let postGetIdController = async (req: Request, res: Response) => {
     try {
@@ -45,9 +46,22 @@ let postGetDeletedController = async (req: Request, res: Response) => {
 let createPostController = async (req: Request, res: Response) => {
     try {
         const {postname,postdescription}=req.body
+        const token:string = req.headers['x-access-token'] as string;
         postValidations({postname,postdescription})
-        const json = await createPostServices(req, res)
-        res.json(baseResponse.baseResponseFunctionSuccess({data:json}))
+        let username:string=''
+        jwt.verify(token, process.env.ACCESS_TOKEN_KEY || '', (err: any, data: any) => {
+            username = data.compareResult.username
+        })
+        const data=await usernameControlServices(username)
+        let userid=data?.dataValues?.id
+        const postNameControl=await postnameControlServices(postname)
+        if (postNameControl?.dataValues===undefined){
+            const json = await createPostServices(req, res,userid)
+            res.json(baseResponse.baseResponseFunctionSuccess({data:json}))
+        }else{
+            throw new Error('Bu post sistemde bulunuyor.')
+        }
+
 
     } catch (e:any) {
         console.log('e', e)
@@ -64,8 +78,17 @@ let editPostController = async (req: Request, res: Response) => {
         if (data?.dataValues===undefined){
             throw new Error('Bu post sistemde bulunamadi.')
         }
-        const json = await editPostSevices(req, res)
-        res.json(baseResponse.baseResponseFunctionSuccess({data:json}))
+        if (postname.length!==0){
+            const postNameControl=await postnameControlServices(postname)
+            if (postNameControl?.dataValues===undefined){
+                const json = await editPostSevices(req, res)
+                res.json(baseResponse.baseResponseFunctionSuccess({data:json}))
+            }else{
+                throw new Error('Bu post sistemde bulunuyor.')
+            }
+        }
+
+
 
     } catch (e:any) {
         console.log('e', e)

@@ -5,14 +5,15 @@ import {
     editRoleController,
     userGetNameController
 } from "../controller/userController";
+import adminMW from '../middleware/authAdmin'
 
 const router = Router();
 
 
-router.get('/', userGetNameController);
-router.post('/', createUserController);
-router.put('/role', editRoleController);
-router.put('/password', editPasswordController);
-router.delete('/', deleteUserController);
+router.get('/',[adminMW], userGetNameController);
+router.post('/', [adminMW],createUserController);
+router.put('/role',[adminMW], editRoleController);
+router.put('/password',[adminMW], editPasswordController);
+router.delete('/',[adminMW], deleteUserController);
 
 export default router

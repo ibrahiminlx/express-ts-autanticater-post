@@ -25,10 +25,11 @@ let postGetDeletedServices=async (req:Request,res:Response)=>{
 
     }
 }
-let createPostServices=async (req:Request,res:Response)=>{
+let createPostServices=async (req:Request,res:Response,userid:string)=>{
     try {
         const {postname,postdescription}=req.body
         const json=await Post.create({
+            userid:userid,
             postname,
             postdescription
         })
@@ -83,9 +84,17 @@ let postIdDeletedControlServices=async (postId:string)=>{
         throw e
     }
 }
+let postnameControlServices=async (postname:string)=>{
+    try {
+        const user= await Post.findOne({where:{postname}})
+        return user
+    }catch (e) {
+        throw e
+    }
+}
 
 
 export {
-    postGetIdServices,createPostServices,editPostSevices,deletePostServices,postIdControlServices,postGetDeletedServices,postIdDeletedControlServices
+    postGetIdServices,createPostServices,editPostSevices,deletePostServices,postIdControlServices,postGetDeletedServices,postIdDeletedControlServices,postnameControlServices
 }
 

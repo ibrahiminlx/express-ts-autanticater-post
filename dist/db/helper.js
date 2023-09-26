@@ -16,6 +16,7 @@ exports.db = void 0;
 const sequelize_1 = require("sequelize");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const User_1 = __importDefault(require("../models/User"));
+const Post_1 = __importDefault(require("../models/Post"));
 const pg_1 = __importDefault(require("pg"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -58,6 +59,7 @@ db.connect = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 db.createTable = () => __awaiter(void 0, void 0, void 0, function* () {
     yield User_1.default.sync({ force: true });
+    yield Post_1.default.sync({ force: true });
     const adminPassword = process.env.ADMIN_PASSWORD || '';
     const adminUsername = process.env.ADMIN_PASSWORD || '';
     let password = yield adminPassword;

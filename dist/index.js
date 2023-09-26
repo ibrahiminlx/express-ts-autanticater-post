@@ -18,6 +18,8 @@ const userRouter_1 = __importDefault(require("./router/userRouter"));
 const helper_1 = require("./db/helper");
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
+const postRouter_1 = __importDefault(require("./router/postRouter"));
+const authRouter_1 = __importDefault(require("./router/authRouter"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
@@ -26,6 +28,8 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());
 app.use('/', userRouter_1.default);
+app.use('/post', postRouter_1.default);
+app.use('/auth', authRouter_1.default);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     yield helper_1.db.dbQueryAndCreate();
     yield helper_1.db.connect();

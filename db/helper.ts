@@ -1,6 +1,7 @@
 import {QueryTypes, Sequelize} from 'sequelize';
 import bcrypt from 'bcryptjs'
 import User from '../models/User'
+import Post from '../models/Post'
 import pg from 'pg';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -45,6 +46,7 @@ db.connect = async () => {
 
 db.createTable = async () => {
     await User.sync({ force: true });
+    await Post.sync({ force: true });
 
     const adminPassword:string=process.env.ADMIN_PASSWORD||''
     const adminUsername:string=process.env.ADMIN_PASSWORD||''

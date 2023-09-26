@@ -48,8 +48,11 @@ let editRoleServices=async (req:Request,res:Response)=>{
 }
 let editPasswordServices=async (req:Request,res:Response)=>{
     try {
-        const {oldpassword,newpassword,username}=req.body
+        const {newpassword,username}=req.body
+        let salt:string =bcrypt.genSaltSync(10)
+        let hashPassword:string=bcrypt.hashSync(newpassword, salt)
         const json=await User.update({
+            password:hashPassword
         },{where:{username}})
         return json
 
@@ -75,7 +78,6 @@ let usernameControlServices=async (username:string)=>{
     try {
         const user= await User.findOne({where:{username}})
         return user
-
     }catch (e) {
         throw e
     }

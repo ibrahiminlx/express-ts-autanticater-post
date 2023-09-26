@@ -61,8 +61,12 @@ let editRoleServices = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.editRoleServices = editRoleServices;
 let editPasswordServices = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { oldpassword, newpassword, username } = req.body;
-        const json = yield User_1.default.update({}, { where: { username } });
+        const { newpassword, username } = req.body;
+        let salt = bcryptjs_1.default.genSaltSync(10);
+        let hashPassword = bcryptjs_1.default.hashSync(newpassword, salt);
+        const json = yield User_1.default.update({
+            password: hashPassword
+        }, { where: { username } });
         return json;
     }
     catch (e) {

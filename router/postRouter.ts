@@ -10,7 +10,7 @@ const router = Router();
 
 
 router.get('/',[readMW], postGetIdController);
-router.get('/usergetpost', userGetPostController);
+router.get('/usergetpost',[readMW], userGetPostController);
 router.get('/deleted',[readMW], postGetDeletedController);
 router.post('/',[writeMW], createPostController);
 router.put('/',[writeMW], editPostController);
